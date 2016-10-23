@@ -2,6 +2,9 @@
 package com.shikhar.face.filter.facetracker;
 
 import android.content.Context;
+import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -107,13 +110,13 @@ class EyesOverlayItem extends Overlay.OverlayItem {
         float eyeRadius = EYE_RADIUS_PROPORTION * distance;
         float irisRadius = IRIS_RADIUS_PROPORTION * distance;
 
-       /* Resources res = mContext.getResources();
+        Resources res = mContext.getResources();
         Bitmap glassBitmap = BitmapFactory.decodeResource(res, R.drawable.ic_aviator);
 
-        canvas.drawBitmap(glassBitmap, leftPosition.x-eyeRadius-6.0f, leftPosition.y-eyeRadius-32.0f, mBoxPaint);*/
+        canvas.drawBitmap(glassBitmap, leftPosition.x-eyeRadius-6.0f, leftPosition.y-eyeRadius-32.0f, mBoxPaint);
 
 
-        // Advance the current left iris position, and draw left eye.
+        /*// Advance the current left iris position, and draw left eye.
         PointF leftIrisPosition =
                 mLeftPhysics.nextIrisPosition(leftPosition, eyeRadius, irisRadius);
         drawEye(canvas, leftPosition, eyeRadius, leftIrisPosition, irisRadius, mLeftOpen);
@@ -121,7 +124,7 @@ class EyesOverlayItem extends Overlay.OverlayItem {
         // Advance the current right iris position, and draw right eye.
         PointF rightIrisPosition =
                 mRightPhysics.nextIrisPosition(rightPosition, eyeRadius, irisRadius);
-        drawEye(canvas, rightPosition, eyeRadius, rightIrisPosition, irisRadius, mRightOpen);
+        drawEye(canvas, rightPosition, eyeRadius, rightIrisPosition, irisRadius, mRightOpen);*/
     }
 
     /**
