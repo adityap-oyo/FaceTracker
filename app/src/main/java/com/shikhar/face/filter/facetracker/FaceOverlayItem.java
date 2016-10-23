@@ -8,14 +8,14 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 
-import com.shikhar.face.filter.facetracker.ui.camera.GraphicOverlay;
 import com.google.android.gms.vision.face.Face;
+import com.shikhar.face.filter.facetracker.ui.camera.Overlay;
 
 /**
- * Graphic instance for rendering face position, orientation, and landmarks within an associated
+ * OverlayItem instance for rendering face position, orientation, and landmarks within an associated
  * graphic overlay view.
  */
-class FaceGraphic extends GraphicOverlay.Graphic {
+class FaceOverlayItem extends Overlay.OverlayItem {
     private static final float FACE_POSITION_RADIUS = 10.0f;
     private static final float ID_TEXT_SIZE = 40.0f;
     private static final float ID_Y_OFFSET = 50.0f;
@@ -23,13 +23,13 @@ class FaceGraphic extends GraphicOverlay.Graphic {
     private static final float BOX_STROKE_WIDTH = 5.0f;
 
     private static final int COLOR_CHOICES[] = {
-        Color.BLUE,
-        Color.CYAN,
-        Color.GREEN,
-        Color.MAGENTA,
-        Color.RED,
-        Color.WHITE,
-        Color.YELLOW
+            Color.BLUE,
+            Color.CYAN,
+            Color.GREEN,
+            Color.MAGENTA,
+            Color.RED,
+            Color.WHITE,
+            Color.YELLOW
     };
     private static int mCurrentColorIndex = 0;
 
@@ -42,7 +42,7 @@ class FaceGraphic extends GraphicOverlay.Graphic {
     private float mFaceHappiness;
     private Context mContext;
 
-    FaceGraphic(GraphicOverlay overlay, Context context) {
+    FaceOverlayItem(Overlay overlay, Context context) {
         super(overlay);
 
         mCurrentColorIndex = (mCurrentColorIndex + 1) % COLOR_CHOICES.length;
@@ -86,8 +86,7 @@ class FaceGraphic extends GraphicOverlay.Graphic {
             return;
         }
 
-        Resources res =   mContext.getResources();
-        Bitmap glassBitmap = BitmapFactory.decodeResource(res, R.drawable.ic_aviator);
+        Resources res = mContext.getResources();
         Bitmap hatBitmap = BitmapFactory.decodeResource(res, R.drawable.ic_hat);
 
         // Draws a circle at the position of the detected face, with the face's track id below.
@@ -97,7 +96,7 @@ class FaceGraphic extends GraphicOverlay.Graphic {
         canvas.drawText("id: " + mFaceId, x + ID_X_OFFSET, y + ID_Y_OFFSET, mIdPaint);
         canvas.drawText("happiness: " + String.format("%.2f", face.getIsSmilingProbability()), x - ID_X_OFFSET, y - ID_Y_OFFSET, mIdPaint);
         canvas.drawText("right eye: " + String.format("%.2f", face.getIsRightEyeOpenProbability()), x + ID_X_OFFSET * 2, y + ID_Y_OFFSET * 2, mIdPaint);
-        canvas.drawText("left eye: " + String.format("%.2f", face.getIsLeftEyeOpenProbability()), x - ID_X_OFFSET*2, y - ID_Y_OFFSET*2, mIdPaint);
+        canvas.drawText("left eye: " + String.format("%.2f", face.getIsLeftEyeOpenProbability()), x - ID_X_OFFSET * 2, y - ID_Y_OFFSET * 2, mIdPaint);
 
 
         // Draws a bounding box around the face.
@@ -108,7 +107,6 @@ class FaceGraphic extends GraphicOverlay.Graphic {
         float right = x + xOffset;
         float bottom = y + yOffset;
         canvas.drawRect(left, top, right, bottom, mBoxPaint);
-        //canvas.drawBitmap(glassBitmap, left+20.0f, top+75.0f , mBoxPaint);
-        canvas.drawBitmap(hatBitmap, left, top-100.0f , mBoxPaint);
+        canvas.drawBitmap(hatBitmap, left, top - 100.0f, mBoxPaint);
     }
 }

@@ -21,8 +21,8 @@ import com.google.android.gms.vision.MultiProcessor;
 import com.google.android.gms.vision.Tracker;
 import com.google.android.gms.vision.face.Face;
 import com.google.android.gms.vision.face.FaceDetector;
-import com.shikhar.face.filter.facetracker.ui.camera.CameraSourcePreview;
-import com.shikhar.face.filter.facetracker.ui.camera.GraphicOverlay;
+import com.shikhar.face.filter.facetracker.ui.camera.CameraView;
+import com.shikhar.face.filter.facetracker.ui.camera.Overlay;
 
 import java.io.IOException;
 
@@ -35,8 +35,8 @@ public final class FaceTrackerActivity extends AppCompatActivity {
 
     private CameraSource mCameraSource = null;
 
-    private CameraSourcePreview mPreview;
-    private GraphicOverlay mGraphicOverlay;
+    private CameraView mPreview;
+    private Overlay mOverlay;
 
     private static final int RC_HANDLE_GMS = 9001;
     // permission request codes need to be < 256
@@ -52,10 +52,10 @@ public final class FaceTrackerActivity extends AppCompatActivity {
     @Override
     public void onCreate(Bundle icicle) {
         super.onCreate(icicle);
-        setContentView(R.layout.main);
+        setContentView(R.layout.layout_face_tracker);
 
-        mPreview = (CameraSourcePreview) findViewById(R.id.preview);
-        mGraphicOverlay = (GraphicOverlay) findViewById(R.id.faceOverlay);
+        mPreview = (CameraView) findViewById(R.id.preview);
+        mOverlay = (Overlay) findViewById(R.id.faceOverlay);
 
         // Check for the camera permission before accessing the camera.  If the
         // permission is not granted yet, request permission.
@@ -93,7 +93,7 @@ public final class FaceTrackerActivity extends AppCompatActivity {
             }
         };
 
-        Snackbar.make(mGraphicOverlay, R.string.permission_camera_rationale,
+        Snackbar.make(mOverlay, R.string.permission_camera_rationale,
                 Snackbar.LENGTH_INDEFINITE)
                 .setAction(R.string.ok, listener)
                 .show();
@@ -234,7 +234,7 @@ public final class FaceTrackerActivity extends AppCompatActivity {
 
         if (mCameraSource != null) {
             try {
-                mPreview.start(mCameraSource, mGraphicOverlay);
+                mPreview.start(mCameraSource, mOverlay);
             } catch (IOException e) {
                 Log.e(TAG, "Unable to start camera source.", e);
                 mCameraSource.release();
@@ -244,7 +244,7 @@ public final class FaceTrackerActivity extends AppCompatActivity {
     }
 
     //==============================================================================================
-    // Graphic Face Tracker
+    // OverlayItem Face Tracker
     //==============================================================================================
 
     /**
@@ -254,7 +254,7 @@ public final class FaceTrackerActivity extends AppCompatActivity {
     private class GraphicFaceTrackerFactory implements MultiProcessor.Factory<Face> {
         @Override
         public Tracker<Face> create(Face face) {
-            return new GraphicFaceTracker(mGraphicOverlay);
+            return new GraphicFaceTracker(mOverlay);
         }
     }
 
@@ -263,12 +263,12 @@ public final class FaceTrackerActivity extends AppCompatActivity {
      * associated face overlay.
      */
     private class GraphicFaceTracker extends Tracker<Face> {
-        private GraphicOverlay mOverlay;
-        private FaceGraphic mFaceGraphic;
+        private Overlay mOverlay;
+        private FaceOverlayItem mFaceGraphic;
 
-        GraphicFaceTracker(GraphicOverlay overlay) {
+        GraphicFaceTracker(Overlay overlay) {
             mOverlay = overlay;
-            mFaceGraphic = new FaceGraphic(overlay, FaceTrackerActivity.this);
+            mFaceGraphic = new FaceOverlayItem(overlay, FaceTrackerActivity.this);
         }
 
         /**

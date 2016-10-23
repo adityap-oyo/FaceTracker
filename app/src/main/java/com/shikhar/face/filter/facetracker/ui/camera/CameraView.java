@@ -13,7 +13,7 @@ import com.google.android.gms.vision.CameraSource;
 
 import java.io.IOException;
 
-public class CameraSourcePreview extends ViewGroup {
+public class CameraView extends ViewGroup {
     private static final String TAG = "CameraSourcePreview";
 
     private Context mContext;
@@ -22,9 +22,9 @@ public class CameraSourcePreview extends ViewGroup {
     private boolean mSurfaceAvailable;
     private CameraSource mCameraSource;
 
-    private GraphicOverlay mOverlay;
+    private Overlay mOverlay;
 
-    public CameraSourcePreview(Context context, AttributeSet attrs) {
+    public CameraView(Context context, AttributeSet attrs) {
         super(context, attrs);
         mContext = context;
         mStartRequested = false;
@@ -48,7 +48,7 @@ public class CameraSourcePreview extends ViewGroup {
         }
     }
 
-    public void start(CameraSource cameraSource, GraphicOverlay overlay) throws IOException {
+    public void start(CameraSource cameraSource, Overlay overlay) throws IOException {
         mOverlay = overlay;
         start(cameraSource);
     }

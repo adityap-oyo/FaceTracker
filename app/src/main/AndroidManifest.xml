@@ -28,17 +28,35 @@
             android:value="face" />
 
         <activity
-            android:name="com.shikhar.face.filter.facetracker.FaceTrackerActivity"
+            android:name="com.shikhar.face.filter.facetracker.HomeActivity"
             android:icon="@drawable/icon"
             android:label="Face Tracker"
             android:theme="@style/Theme.AppCompat.NoActionBar"
-            android:screenOrientation="fullSensor">
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <activity
+            android:name="com.shikhar.face.filter.facetracker.FaceTrackerActivity"
+            android:icon="@drawable/icon"
+            android:label="Face Tracker"
+            android:theme="@style/Theme.AppCompat.NoActionBar"
+            android:screenOrientation="portrait">
+        </activity>
+
+        <activity
+            android:name="com.shikhar.face.filter.facetracker.EyesTrackerActivity"
+            android:icon="@drawable/icon"
+            android:label="Face Tracker"
+            android:theme="@style/Theme.AppCompat.NoActionBar"
+            android:screenOrientation="portrait">
+        </activity>
+
+
     </application>
 
 </manifest>

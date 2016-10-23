@@ -19,33 +19,33 @@ import java.util.Set;
  * idea is that detection items are expressed in terms of a preview size, but need to be scaled up
  * to the full view size, and also mirrored in the case of the front-facing camera.<p>
  *
- * Associated {@link Graphic} items should use the following methods to convert to view coordinates
+ * Associated {@link OverlayItem} items should use the following methods to convert to view coordinates
  * for the graphics that are drawn:
  * <ol>
- * <li>{@link Graphic#scaleX(float)} and {@link Graphic#scaleY(float)} adjust the size of the
+ * <li>{@link OverlayItem#scaleX(float)} and {@link OverlayItem#scaleY(float)} adjust the size of the
  * supplied value from the preview scale to the view scale.</li>
- * <li>{@link Graphic#translateX(float)} and {@link Graphic#translateY(float)} adjust the coordinate
+ * <li>{@link OverlayItem#translateX(float)} and {@link OverlayItem#translateY(float)} adjust the coordinate
  * from the preview's coordinate system to the view coordinate system.</li>
  * </ol>
  */
-public class GraphicOverlay extends View {
+public class Overlay extends View {
     private final Object mLock = new Object();
     private int mPreviewWidth;
     private float mWidthScaleFactor = 1.0f;
     private int mPreviewHeight;
     private float mHeightScaleFactor = 1.0f;
     private int mFacing = CameraSource.CAMERA_FACING_BACK;
-    private Set<Graphic> mGraphics = new HashSet<>();
+    private Set<OverlayItem> mOverlayItems = new HashSet<>();
 
     /**
      * Base class for a custom graphics object to be rendered within the graphic overlay.  Subclass
-     * this and implement the {@link Graphic#draw(Canvas)} method to define the
-     * graphics element.  Add instances to the overlay using {@link GraphicOverlay#add(Graphic)}.
+     * this and implement the {@link OverlayItem#draw(Canvas)} method to define the
+     * graphics element.  Add instances to the overlay using {@link Overlay#add(OverlayItem)}.
      */
-    public static abstract class Graphic {
-        private GraphicOverlay mOverlay;
+    public static abstract class OverlayItem {
+        private Overlay mOverlay;
 
-        public Graphic(GraphicOverlay overlay) {
+        public OverlayItem(Overlay overlay) {
             mOverlay = overlay;
         }
 
@@ -53,9 +53,9 @@ public class GraphicOverlay extends View {
          * Draw the graphic on the supplied canvas.  Drawing should use the following methods to
          * convert to view coordinates for the graphics that are drawn:
          * <ol>
-         * <li>{@link Graphic#scaleX(float)} and {@link Graphic#scaleY(float)} adjust the size of
+         * <li>{@link OverlayItem#scaleX(float)} and {@link OverlayItem#scaleY(float)} adjust the size of
          * the supplied value from the preview scale to the view scale.</li>
-         * <li>{@link Graphic#translateX(float)} and {@link Graphic#translateY(float)} adjust the
+         * <li>{@link OverlayItem#translateX(float)} and {@link OverlayItem#translateY(float)} adjust the
          * coordinate from the preview's coordinate system to the view coordinate system.</li>
          * </ol>
          *
@@ -103,7 +103,7 @@ public class GraphicOverlay extends View {
         }
     }
 
-    public GraphicOverlay(Context context, AttributeSet attrs) {
+    public Overlay(Context context, AttributeSet attrs) {
         super(context, attrs);
     }
 
@@ -112,27 +112,27 @@ public class GraphicOverlay extends View {
      */
     public void clear() {
         synchronized (mLock) {
-            mGraphics.clear();
+            mOverlayItems.clear();
         }
         postInvalidate();
     }
 
     /**
-     * Adds a graphic to the overlay.
+     * Adds a overlayItem to the overlay.
      */
-    public void add(Graphic graphic) {
+    public void add(OverlayItem overlayItem) {
         synchronized (mLock) {
-            mGraphics.add(graphic);
+            mOverlayItems.add(overlayItem);
         }
         postInvalidate();
     }
 
     /**
-     * Removes a graphic from the overlay.
+     * Removes a overlayItem from the overlay.
      */
-    public void remove(Graphic graphic) {
+    public void remove(OverlayItem overlayItem) {
         synchronized (mLock) {
-            mGraphics.remove(graphic);
+            mOverlayItems.remove(overlayItem);
         }
         postInvalidate();
     }
@@ -163,8 +163,8 @@ public class GraphicOverlay extends View {
                 mHeightScaleFactor = (float) canvas.getHeight() / (float) mPreviewHeight;
             }
 
-            for (Graphic graphic : mGraphics) {
-                graphic.draw(canvas);
+            for (OverlayItem overlayItem : mOverlayItems) {
+                overlayItem.draw(canvas);
             }
         }
     }
